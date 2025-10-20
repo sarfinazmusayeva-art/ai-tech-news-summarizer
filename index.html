@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Tech News Summarizer</title>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 700px;
+            margin: auto;
+            padding: 20px;
+            text-align: center;
+        }
+        textarea, input, button {
+            padding: 10px;
+            margin: 5px 0;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .output {
+            margin-top: 20px;
+            text-align: left;
+            background: #f4f4f4;
+            padding: 15px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>📚 AI Tech News Summarizer</h2>
+    <p>Paste your tech article below to get a summary, keywords, and reading time estimate.</p>
+
+    <textarea id="article" rows="10" placeholder="Paste article here..."></textarea>
+    <button onclick="generateSummary()">Generate Summary</button>
+
+    <div class="output" id="result"></div>
+
+    <script>
+        function generateSummary() {
+            let text = document.getElementById('article').value;
+            if (!text) {
+                alert("Please enter some text.");
+                return;
+            }
+
+            // Simple frontend simulation (mirrors Python logic roughly)
+            let sentences = text.split('. ');
+            let summary = sentences.slice(0,3).join('. ');
+            if (!summary.endsWith('.')) summary += '.';
+
+            let words = text.replace(/[.,!?;:]/g,'').toLowerCase().split(/\s+/);
+            let common = ["the","is","and","in","to","a","of","for","on","with","as","by","an","it","this","that"];
+            let freq = {};
+            words.forEach(word => {
+                if (!common.includes(word) && word.length>2) freq[word] = (freq[word]||0)+1;
+            });
+            let keywords = Object.entries(freq).sort((a,b)=>b[1]-a[1]).slice(0,5).map(e=>e[0]);
+
+            let readingTime = Math.round(words.length/200 * 10)/10;
+
+            let resultHTML = `<h3>Summary:</h3><p>${summary}</p>`;
+            resultHTML += `<h3>Keywords:</h3><p>${keywords.join(', ')}</p>`;
+            resultHTML += `<h3>Estimated Reading Time:</h3><p>${readingTime} minutes</p>`;
+
+            document.getElementById('result').innerHTML = resultHTML;
+        }
+    </script>
+
+</body>
+</html>
